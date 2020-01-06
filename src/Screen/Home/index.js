@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import  MapView  from 'react-native-maps';
+import  MapView ,{Marker} from 'react-native-maps';
 import styles from "./style";
 import {CheckBox} from 'react-native-elements';
 import Color from "../../Config/Color";
@@ -29,7 +29,7 @@ export default class index extends Component {
   constructor() {
     super();
     this.state = {
-      zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',
+      zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',pinClick:false,
       ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',currentLocation:[37.550383,126.939822],dataLocation:[126.955493, 7.5521599]
     };
   }
@@ -155,10 +155,18 @@ export default class index extends Component {
           longitude: this.state.currentLocation[1],
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421
-                      }}/>}
+                      }}>
+                      <Marker coordinate={{latitude:37.550383,longitude:126.939822}}
+                      title="서강대"
+                      onPress= {()=>this.setState({pinClick:!this.state.pinClick})}/>
+                      </MapView>
+                      }
         </View>
         <View style={styles.subcontainer}>
-          <View style={Container.container}>
+        {
+          this.state.pinClick ?
+          <TextInput style={styles.TextInput}/>
+          :<View style={Container.container}><View style={Container.container}>
             <Button title="QR충전" style={{width:40,height:40}}/>
           </View>
           <View style={Container.container}>
@@ -170,6 +178,8 @@ export default class index extends Component {
           <View style={Container.container}>
             <Button title="즐겨찾기" style={{width:40,height:40}}/>
           </View>
+          </View>
+        }
         </View>
       </View>
     </Drawer>
