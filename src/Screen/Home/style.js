@@ -35,14 +35,7 @@ export default {
     //  shadowOpacity: 1,
     elevation: 3
   },
-  drawer:{
-    container:{
-      flex:0.8,
-      screen:"./sideMenu"
-    },
-    style:
-    {
-      disableOpenGesture: false,
-    }
-  }
+  textInput:{
+    height: 40, borderColor: 'grey', borderWidth: 1
+  },
 };

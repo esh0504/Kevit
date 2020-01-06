@@ -30,7 +30,7 @@ export default class index extends Component {
     super();
     this.state = {
       zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',
-      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',
+      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',currentLocation:[37.550383,126.939822],dataLocation:[126.955493, 7.5521599]
     };
   }
   
@@ -63,7 +63,7 @@ export default class index extends Component {
             </View>
             <View style={{flex:6}}>
               <TextInput
-                style={{height: 40, borderColor: 'grey', borderWidth: 1}}
+                style={styles.TextInput}
                 onChangeText={(text) => this.setState({text})}
                 value={this.state.text}
               />
@@ -131,12 +131,12 @@ export default class index extends Component {
           <View style={{flex:1}}>
             <View style={Container.container}>
               <TextInput
-                style={{height: 40, borderColor: 'grey', borderWidth: 1}}
+                style={styles.TextInput}
                 onChangeText={(sourcesearchText) => this.setState({sourcesearchText})}
                 value={this.state.sourcesearchText}
               />
               <TextInput
-                style={{height: 40, borderColor: 'grey', borderWidth: 1}}
+                style={styles.TextInput}
                 onChangeText={(destsearchText) => this.setState({destsearchText})}
                 value={this.state.destsearchText}
               />
@@ -144,15 +144,15 @@ export default class index extends Component {
             <MapView 
               style={{flex:5}}
               initialRegion={{
-              latitude: 37.550383,
-              longitude: 126.939822,
+              latitude: this.state.currentLocation[0],
+              longitude: this.state.currentLocation[1],
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421
             }}/></View>
        :<MapView style={{flex:1}}
           initialRegion={{
-          latitude: 37.550383,
-          longitude: 126.939822,
+          latitude: this.state.currentLocation[0],
+          longitude: this.state.currentLocation[1],
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421
                       }}/>}
