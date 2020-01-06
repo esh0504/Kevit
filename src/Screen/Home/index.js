@@ -29,7 +29,7 @@ export default class index extends Component {
   constructor() {
     super();
     this.state = {
-      zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,
+      zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',
       ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',
     };
   }
@@ -72,7 +72,7 @@ export default class index extends Component {
               <Button title="돋보기" onPress={() => this.searchdrawer._root.open()} style={{width:40,height:40}}/>
             </View>
             <View style={{flex:1}}>
-              <Button title="지도" onPress={() => this.mapdrawer._root.open()} style={{width:40,height:40}}/>
+            <Button title="지도" onPress={() => this.setState({show:!this.state.show})} style={{width:40,height:40}}/>
             </View>
           </View>
           <View style={styles.subcontainer}>
@@ -124,23 +124,39 @@ export default class index extends Component {
             </View>
           </View>
         </View>
-        <Drawer
-          side="top"
-          ref={ref => {
-            this.mapdrawer = ref;
-          }}
-          content={<InviteFriendsList navigation={this.props.navigation} />}
-          onClose={() => this.mapdrawer._root.close()}
-        >
-        <MapView 
-          style={{flex:5}}
+        
+        <View style={{flex:6}}>
+        {
+        this.state.show ?
+          <View style={{flex:1}}>
+            <View style={Container.container}>
+              <TextInput
+                style={{height: 40, borderColor: 'grey', borderWidth: 1}}
+                onChangeText={(sourcesearchText) => this.setState({sourcesearchText})}
+                value={this.state.sourcesearchText}
+              />
+              <TextInput
+                style={{height: 40, borderColor: 'grey', borderWidth: 1}}
+                onChangeText={(destsearchText) => this.setState({destsearchText})}
+                value={this.state.destsearchText}
+              />
+            </View>
+            <MapView 
+              style={{flex:5}}
+              initialRegion={{
+              latitude: 37.550383,
+              longitude: 126.939822,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
+            }}/></View>
+       :<MapView style={{flex:1}}
           initialRegion={{
           latitude: 37.550383,
           longitude: 126.939822,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421
-                      }}/>
-        </Drawer>
+                      }}/>}
+        </View>
         <View style={styles.subcontainer}>
           <View style={Container.container}>
             <Button title="QR충전" style={{width:40,height:40}}/>
