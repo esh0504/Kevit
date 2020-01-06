@@ -3,8 +3,7 @@ export default{
     container: {
         backgroundColor: Color.white,
         flex: 1,
-        marginHorizontal:10,
-        
+        marginTop: "5%"
       },
       marginHorizontal:{
         marginHorizontal: 15,

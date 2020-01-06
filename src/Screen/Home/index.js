@@ -33,12 +33,8 @@ export default class index extends Component {
       ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',currentLocation:[37.550383,126.939822],dataLocation:[126.955493, 7.5521599]
     };
   }
-  
   render() {
-      
     return (
-     
-
       <Drawer
         side="bottom"
         ref={ref => {
@@ -55,9 +51,7 @@ export default class index extends Component {
         onClose={() => this.sidedrawer._root.close()}
       >
       <View style={Container.container}>
-        <View style={{flex:0.05}}>
-        </View>
-        <View style ={{flex:1}}>
+        <View style ={{flex:0.6}}>
           <View style={styles.subcontainer}>
             <View style={{flex:1}}>
               <Button title="" onPress={() => this.sidedrawer._root.open()} style={{flex:1}} Image="../../Image/menu.png"/>
@@ -128,9 +122,8 @@ export default class index extends Component {
             </View>
           </View>
         </View>
-        <View style={{height:Dimensions.get('window').height*0.75}}>
-          
-          <MapView style={{height:Dimensions.get('window').height*0.75}}
+        <View style={{flex:6}}>
+          <MapView style={{flex:1}}
             initialRegion={{
             latitude: this.state.currentLocation[0],
             longitude: this.state.currentLocation[1],
@@ -145,7 +138,7 @@ export default class index extends Component {
             />
           </MapView>
           {this.state.show ?
-          <View style={{position:'absolute',Top:1,backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}>            
+          <View style={{position:'absolute',backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}>            
             <TextInput
               style={styles.TextInput}
               onChangeText={(sourcesearchText) => this.setState({sourcesearchText})}
@@ -161,7 +154,7 @@ export default class index extends Component {
         </View>
       
        
-        <View style={styles.subcontainer}>
+        <View style={{position:'absolute',width:Dimensions.get('window').width,height:'8%', flexDirection:"row",bottom:30,alignItems:'center'}}>
         {
           this.state.pinClick ?
           <View style={Container.container}>
@@ -175,19 +168,11 @@ export default class index extends Component {
               </View>
             </View>
           </View>
-          :<View style={styles.subcontainer}>
-            <View style={Container.container}>
-              <Button title="QR충전" style={{flex:1}}/>
-            </View>
-            <View style={Container.container}>
-              <Button title="결제충전소" style={{flex:1}}/>
-            </View> 
-            <View style={Container.container}>
-              <Button title="신규정보" style={{flex:1}}/>
-            </View>
-            <View style={Container.container}>
-              <Button title="즐겨찾기" style={{flex:1}}/>
-            </View>
+          :<View style={{padding:10,flex:1,flexDirection:"row"}}>
+              <Button title="QR충전" />
+              <Button title="결제충전소" />
+              <Button title="신규정보" />
+              <Button title="즐겨찾기" />
           </View>
         }
         </View>
