@@ -16,7 +16,7 @@ import {
   Button,
   DrawerLayoutAndroid,
 } from "react-native";
-import { Dropdown } from 'react-native-material-dropdown';
+
 import { Icon, Col ,Drawer} from "native-base";
 import SideBar from "../../Screen/SideMenu/index";
 import Container from "../../Styles/Container/style";
@@ -37,6 +37,8 @@ export default class index extends Component {
   render() {
       
     return (
+     
+
       <Drawer
         side="bottom"
         ref={ref => {
@@ -53,10 +55,12 @@ export default class index extends Component {
         onClose={() => this.sidedrawer._root.close()}
       >
       <View style={Container.container}>
+        <View style={{flex:0.05}}>
+        </View>
         <View style ={{flex:1}}>
           <View style={styles.subcontainer}>
             <View style={{flex:1}}>
-              <Button title="" onPress={() => this.sidedrawer._root.open()} style={{width:40,height:40}} Image="../../Image/menu.png"/>
+              <Button title="" onPress={() => this.sidedrawer._root.open()} style={{flex:1}} Image="../../Image/menu.png"/>
             </View>
             <View style={{flex:2}}>
               <Text style={styles.text}>EV Infra</Text>
@@ -69,10 +73,10 @@ export default class index extends Component {
               />
             </View>
             <View style={{flex:1}}>
-              <Button title="돋보기" onPress={() => this.searchdrawer._root.open()} style={{width:40,height:40}}/>
+              <Button title="돋보기" onPress={() => this.searchdrawer._root.open()} style={{flex:1}}/>
             </View>
             <View style={{flex:1}}>
-            <Button title="지도" onPress={() => this.setState({show:!this.state.show})} style={{width:40,height:40}}/>
+            <Button title="지도" onPress={() => this.setState({show:!this.state.show})} style={{flex:1}}/>
             </View>
           </View>
           <View style={styles.subcontainer}>
@@ -124,60 +128,66 @@ export default class index extends Component {
             </View>
           </View>
         </View>
-        
-        <View style={{flex:6}}>
-        {
-        this.state.show ?
-          <View style={{flex:1}}>
-            <View style={Container.container}>
-              <TextInput
-                style={styles.TextInput}
-                onChangeText={(sourcesearchText) => this.setState({sourcesearchText})}
-                value={this.state.sourcesearchText}
-              />
-              <TextInput
-                style={styles.TextInput}
-                onChangeText={(destsearchText) => this.setState({destsearchText})}
-                value={this.state.destsearchText}
-              />
-            </View>
-            <MapView 
-              style={{flex:5}}
-              initialRegion={{
-              latitude: this.state.currentLocation[0],
-              longitude: this.state.currentLocation[1],
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421
-            }}/></View>
-       :<MapView style={{flex:1}}
-          initialRegion={{
-          latitude: this.state.currentLocation[0],
-          longitude: this.state.currentLocation[1],
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-                      }}>
-                      <Marker coordinate={{latitude:37.550383,longitude:126.939822}}
-                      title="서강대"
-                      onPress= {()=>this.setState({pinClick:!this.state.pinClick})}/>
-                      </MapView>
-                      }
+        <View style={{height:Dimensions.get('window').height*0.75}}>
+          
+          <MapView style={{height:Dimensions.get('window').height*0.75}}
+            initialRegion={{
+            latitude: this.state.currentLocation[0],
+            longitude: this.state.currentLocation[1],
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }}>
+            <Marker coordinate={{latitude:37.550383,longitude:126.939822}}
+              title="서강대"
+              onPress= {()=>this.setState({pinClick:!this.state.pinClick})}
+              pinColor={this.state.pinClick ? 'white':'green'}
+              Image="../../Image/menu.png"
+            />
+          </MapView>
+          {this.state.show ?
+          <View style={{position:'absolute',Top:1,backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}>            
+            <TextInput
+              style={styles.TextInput}
+              onChangeText={(sourcesearchText) => this.setState({sourcesearchText})}
+              value={this.state.sourcesearchText}
+            />
+            <TextInput
+              style={styles.TextInput}
+              onChangeText={(destsearchText) => this.setState({destsearchText})}                  
+              value={this.state.destsearchText}
+           />
+          </View>
+          :null}
         </View>
+      
+       
         <View style={styles.subcontainer}>
         {
           this.state.pinClick ?
-          <TextInput style={styles.TextInput}/>
-          :<View style={Container.container}><View style={Container.container}>
-            <Button title="QR충전" style={{width:40,height:40}}/>
-          </View>
           <View style={Container.container}>
-            <Button title="결제충전소" style={{width:40,height:40}}/>
-          </View> 
-          <View style={Container.container}>
-            <Button title="신규정보" style={{width:40,height:40}}/>
+            <Button title="어디어디장소" onPress={()=>this.props.navigation.navigate('SignUp')} />
+            <View style={styles.subcontainer}>
+              <View style={{flex:1.3}}>
+                <Button title="주차장상태창" onPress={()=>this.props.navigation.navigate('SignUp')} />
+              </View>
+              <View style={{flex:1}}>
+                <Button title="색깔핀" onPress={()=>this.props.navigation.navigate('SignUp')} />
+              </View>
+            </View>
           </View>
-          <View style={Container.container}>
-            <Button title="즐겨찾기" style={{width:40,height:40}}/>
-          </View>
+          :<View style={styles.subcontainer}>
+            <View style={Container.container}>
+              <Button title="QR충전" style={{flex:1}}/>
+            </View>
+            <View style={Container.container}>
+              <Button title="결제충전소" style={{flex:1}}/>
+            </View> 
+            <View style={Container.container}>
+              <Button title="신규정보" style={{flex:1}}/>
+            </View>
+            <View style={Container.container}>
+              <Button title="즐겨찾기" style={{flex:1}}/>
+            </View>
           </View>
         }
         </View>
