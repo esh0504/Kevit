@@ -7,8 +7,7 @@ export default class App extends Component {
     super();
     this.state = {
       fontLoaded: false,
-      zhaqh:false,
-      ehfh:'ehfh',
+      
     };
   }
   async componentDidMount() {

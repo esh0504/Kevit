@@ -16,21 +16,22 @@ import {
   Button,
   DrawerLayoutAndroid,
 } from "react-native";
-
 import { Icon, Col ,Drawer} from "native-base";
 import SideBar from "../../Screen/SideMenu/index";
 import Container from "../../Styles/Container/style";
 import IconText from "../../Component/Icon2Text/index";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
-import MyWallet from "../../Screen/MyWallet/index";
+import Cndwjsth from "../../Screen/cndwjsth/index";
 import InviteFriendsList from "../../Screen/InviteFriendsList/index";
 
 export default class index extends Component {
+
   constructor() {
     super();
     this.state = {
+      latitude:37.550383,longitude:126.939822,
       zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',pinClick:false,
-      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',currentLocation:[37.550383,126.939822],dataLocation:[126.955493, 7.5521599]
+      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',dataLocation:[126.955493, 7.5521599]
     };
   }
   render() {
@@ -40,7 +41,7 @@ export default class index extends Component {
         ref={ref => {
           this.searchdrawer = ref;
         }}
-        content={<MyWallet navigation={this.props.navigation} />}
+        content={<Cndwjsth navigation={this.props.navigation} />}
         onClose={() => this.searchdrawer._root.close()}
       >    
       <Drawer
@@ -51,10 +52,14 @@ export default class index extends Component {
         onClose={() => this.sidedrawer._root.close()}
       >
       <View style={Container.container}>
-        <View style ={{flex:0.6}}>
+        <View style={Container.head}>
+        </View>
+        <View style ={{flex:1}}>
           <View style={styles.subcontainer}>
             <View style={{flex:1}}>
-              <Button title="" onPress={() => this.sidedrawer._root.open()} style={{flex:1}} Image="../../Image/menu.png"/>
+              <TouchableOpacity onPress={() => this.sidedrawer._root.open()} style={{flex:1}}>
+                <Image style={{width: 40, height: 40}} source={require('../../Image/menu.png')} />
+              </TouchableOpacity>
             </View>
             <View style={{flex:2}}>
               <Text style={styles.text}>EV Infra</Text>
@@ -67,10 +72,14 @@ export default class index extends Component {
               />
             </View>
             <View style={{flex:1}}>
-              <Button title="돋보기" onPress={() => this.searchdrawer._root.open()} style={{flex:1}}/>
+              <TouchableOpacity onPress={() => this.searchdrawer._root.open()} style={{flex:1}}>
+                <Image style={{width: 40, height: 40}} source={require('../../Image/add.png')} />
+              </TouchableOpacity>
             </View>
             <View style={{flex:1}}>
-            <Button title="지도" onPress={() => this.setState({show:!this.state.show})} style={{flex:1}}/>
+              <TouchableOpacity onPress={() => this.setState({show:!this.state.show})} style={{flex:1}}>
+                <Image style={{width: 40, height: 40}} source={require('../../Image/Pic.png')} />
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.subcontainer}>
@@ -105,19 +114,19 @@ export default class index extends Component {
 
           </View>
           <View style={styles.subcontainer}>
-            <View style={styles.subcontainer}>
+            <View style={Container.container}>
               <CheckBox title='콤보'  checked={this.state.zhaqh} onPress={()=>this.setState({zhaqh:!this.state.zhaqh})}/>
             </View>
-            <View style={styles.subcontainer}>
+            <View style={Container.container}>
               <CheckBox title='차데모' checked={this.state.ckepah} onPress={()=>this.setState({ckepah:!this.state.ckepah})}/>             
             </View>
-            <View style={styles.subcontainer}>
+            <View style={Container.container}>
               <CheckBox title='AC3상' checked={this.state.ac3tkd} onPress={()=>this.setState({ac3tkd:!this.state.ac3tkd})}/>     
             </View>
-            <View style={styles.subcontainer}>
+            <View style={Container.container}>
               <CheckBox title='수퍼차저' checked={this.state.tnvjckwj} onPress={()=>this.setState({tnvjckwj:!this.state.tnvjckwj})}/>      
             </View>
-            <View style={styles.subcontainer}>
+            <View style={Container.container}>
               <CheckBox title='완속' checked={this.state.dhksthr} onPress={()=>this.setState({dhksthr:!this.state.dhksthr})}/>
             </View>
           </View>
@@ -125,20 +134,21 @@ export default class index extends Component {
         <View style={{flex:6}}>
           <MapView style={{flex:1}}
             initialRegion={{
-            latitude: this.state.currentLocation[0],
-            longitude: this.state.currentLocation[1],
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}>
             <Marker coordinate={{latitude:37.550383,longitude:126.939822}}
               title="서강대"
+              description="빈장소갯수"
               onPress= {()=>this.setState({pinClick:!this.state.pinClick})}
-              pinColor={this.state.pinClick ? 'white':'green'}
+              pinColor={this.state.pinClick ? 'yellow':'green'}
               Image="../../Image/menu.png"
             />
           </MapView>
           {this.state.show ?
-          <View style={{position:'absolute',backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}>            
+          <View style={{position:'absolute',backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}> 
             <TextInput
               style={styles.TextInput}
               onChangeText={(sourcesearchText) => this.setState({sourcesearchText})}
@@ -152,9 +162,7 @@ export default class index extends Component {
           </View>
           :null}
         </View>
-      
-       
-        <View style={{position:'absolute',width:Dimensions.get('window').width,height:'8%', flexDirection:"row",bottom:30,alignItems:'center'}}>
+          <View style={{position:'absolute', flexDirection:"row",flex:1,alignItems:'center',bottom:0}}>
         {
           this.state.pinClick ?
           <View style={Container.container}>
@@ -168,12 +176,21 @@ export default class index extends Component {
               </View>
             </View>
           </View>
-          :<View style={{padding:10,flex:1,flexDirection:"row"}}>
+          :
+          <View style ={styles.subcontainer}>
+            <View style={{marginLeft:20,flex:1,bottom:30}}>
               <Button title="QR충전" />
+            </View>
+            <View style={{flex:1,bottom:30}}>
               <Button title="결제충전소" />
+            </View>
+            <View style={{flex:1,bottom:30}}>
               <Button title="신규정보" />
+            </View>
+            <View style={{marginRight:20,flex:1,bottom:30}}>
               <Button title="즐겨찾기" />
-          </View>
+            </View>
+          </View>      
         }
         </View>
       </View>

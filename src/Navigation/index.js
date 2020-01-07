@@ -26,13 +26,19 @@ import Rating from "../Screen/Rating/index";
 import Tips from "../Screen/Tips/index";
 import InviteFriendsList from "../Screen/InviteFriendsList/index";
 import MyAccount from '../Screen/MyAccount/index';
-
+import cndwjsth from '../Screen/cndwjsth/index';
 const AppNavigator = createStackNavigator(
   {
     Slider: {
       screen: Slider,
       navigationOptions: {
         header: null
+      }
+    },
+    cndwjsth:{
+      screen: cndwjsth,
+      navigationOptions:{
+        header:null
       }
     },
     Welcome: {
