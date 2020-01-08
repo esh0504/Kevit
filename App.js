@@ -2,6 +2,13 @@ import React, { Component } from 'react'
 import Navigation from './src/Navigation/index'
 import { AppLoading } from "expo";//
 import * as Font from 'expo-font';
+import reducer from './src/Redux/modules/reducer'
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+
+let store =createStore(reducer);
+
+
 export default class App extends Component {
   constructor() {
     super();
@@ -21,9 +28,9 @@ export default class App extends Component {
   }
   render() {
     if (this.state.fontLoaded) {
-      return <Navigation />;
+      return <Provider store={store}><Navigation /></Provider>;
     } else {
-      return <AppLoading />;
+      return <Provider store={store}><AppLoading /></Provider>;
     }
   }
 }

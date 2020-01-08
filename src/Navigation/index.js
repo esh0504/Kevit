@@ -3,7 +3,7 @@ import Slider from "../Screen/Slider/index";
 import Welcome from "../Screen/Welcome/index";
 import SignUp from "../Screen/SignUp/index";
 import OTP from "../Screen/OTP/index";
-import Home from "../Screen/Home/index";
+import Home from "../Screen/Home/presenter";
 import HomeUp from "../Screen/HomeUp/index";
 import Model from "../Component/Model/index";
 import HomeLetsGo from "../Screen/HomeLetsGo/index";
