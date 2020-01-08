@@ -34,6 +34,7 @@ export default class index extends Component {
       ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',dataLocation:[126.955493, 7.5521599]
     };
   }
+  
   render() {
     return (
       <Drawer
