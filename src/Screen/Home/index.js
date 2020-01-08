@@ -23,6 +23,7 @@ import IconText from "../../Component/Icon2Text/index";
 import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Cndwjsth from "../../Screen/cndwjsth/index";
 import InviteFriendsList from "../../Screen/InviteFriendsList/index";
+import axios from "axios";
 
 export default class index extends Component {
 
@@ -34,8 +35,16 @@ export default class index extends Component {
       ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',dataLocation:[126.955493, 7.5521599]
     };
   }
-  
+  getData=async()=>{
+      const {data}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/rest/EvChargerService?ServiceKey=SpZuHRIOaPX3Y9sjFUi9oe8QszqTPPqtvaGvoEp2sWsbfVLQ6NAEdBMdhnTXRn57OeL0uBK9DKOLr0AnpqxbXw%3D%3D`);
+      this.setState({
+        data
+      });
+  };
   render() {
+    
+  this.getData();
+  console.log(this.state.data);
     return (
       <Drawer
         side="bottom"
