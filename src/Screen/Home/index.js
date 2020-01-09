@@ -32,19 +32,35 @@ export default class index extends Component {
     this.state = {
       latitude:37.550383,longitude:126.939822,
       zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',pinClick:false,
-      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',dataLocation:[126.955493, 7.5521599]
-    };
-  }
+      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',locations:[{region:{latitude:37.550383,longitude:126.939822},title:"서강대학교",stat:"1",desc:"24시간이용가능",type:"03"},{region:{latitude:37.470383,longitude:126.949822} ,title:"서강대학교",stat:"2", desc:"24시간이용가능" ,type:"02"},{region:{latitude:36.9050383,longitude:126.139822}, title:"서강대학교" ,stat:"3" ,desc:"24시간이용가능" ,type:"01"}],
+  };}
   getData=async()=>{
-      const {data}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/rest/EvChargerService?ServiceKey=SpZuHRIOaPX3Y9sjFUi9oe8QszqTPPqtvaGvoEp2sWsbfVLQ6NAEdBMdhnTXRn57OeL0uBK9DKOLr0AnpqxbXw%3D%3D`);
+      const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&period=5&pageNo=1&pageSize=100`);
       this.setState({
-        data
+        item:items[0].item
       });
+      console.log(this.state.item);
   };
+
+
+ renderMarkers() {
+   return this.state.locations.map((_marker) => {
+    <Marker
+      title = {_marker.title }
+      coordinate={_marker.region}
+      description = { _marker.desc }
+      pinColor='red'
+      />
+
+
+
+  }
+  )}
+  
+
+ 
   render() {
-    
-  this.getData();
-  console.log(this.state.data);
+    //this.getData();
     return (
       <Drawer
         side="bottom"
@@ -142,21 +158,52 @@ export default class index extends Component {
           </View>
         </View>
         <View style={{flex:6}}>
-          <MapView style={{flex:1}}
+          <MapView 
+            ref={ref=>mymap=ref}
+            style={{flex:1}}
             initialRegion={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
+            latitude: 37.55114225941841,
+            longitude: 126.93943310530443,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
-          }}>
-            <Marker coordinate={{latitude:37.550383,longitude:126.939822}}
-              title="서강대"
-              description="빈장소갯수"
-              onPress= {()=>this.setState({pinClick:!this.state.pinClick})}
-              pinColor={this.state.pinClick ? 'yellow':'green'}
-              Image="../../Image/menu.png"
-            />
+            }}
+          >
+          {this.state.locations.map((_marker, index) => {
+            if(_marker.stat=="1"){
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.title }
+                coordinate={_marker.region}
+                description = { _marker.desc }
+                pinColor='red'
+                />
+            )
+            }else if(_marker.stat=='2')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.title }
+                coordinate={_marker.region}
+                description = { _marker.desc }
+                pinColor='gray'
+                />
+            )
+            }else{
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.title }
+                coordinate={_marker.region}
+                description = { _marker.desc }
+                pinColor='green'
+                />
+            )
+            }
+           })}
           </MapView>
+  
           {this.state.show ?
           <View style={{position:'absolute',backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}> 
             <TextInput
