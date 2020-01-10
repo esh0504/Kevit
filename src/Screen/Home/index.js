@@ -24,7 +24,7 @@ import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import Cndwjsth from "../../Screen/cndwjsth/index";
 import InviteFriendsList from "../../Screen/InviteFriendsList/index";
 import axios from "axios";
-
+import Payment from "../../Screen/Payment/index";
 export default class index extends Component {
 
   constructor() {
@@ -32,7 +32,7 @@ export default class index extends Component {
     this.state = {
       latitude:37.550383,longitude:126.939822,
       zhaqh:false,ckepah:false,ac3tkd:false,tnvjckwj:false,dhksthr:false,show:false,sourcesearchText:'출발지',destsearchText:'도착지',pinClick:false,
-      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',locations:[
+      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'',sidemenuOpen:false,text:'Input your text',informLocation:{statNm:" ",chgerType:" "},chargertype:" ",locations:[
   {
     addr: "서울특별시 종로구 종로 157, 지하주차장 4층 하층 T구역",
     busicall: "1661-9408",
@@ -369,7 +369,7 @@ export default class index extends Component {
     busiId: "ME",
     busiNm: "환경부",
     chgerId: "01",
-    chgerType: "03",
+    chgerType: "02",
     lat: "37.56401856",
     lng: "126.85059572",
     powerType: "급속(50kW)",
@@ -473,10 +473,11 @@ export default class index extends Component {
       });
       console.log(this.state.item);
   };
-  
+
   
   render() {
     
+    console.log(this.state.informLocation.statNm);
     return (
       <Drawer
         side="bottom"
@@ -585,8 +586,12 @@ export default class index extends Component {
             }}
           >
           {this.state.locations.map((_marker, index) => {
-        
-            if(_marker.stat=="1"){
+            
+  if(this.state.ckepah==true)
+  {
+    if(_marker.chgerType=="01" ||_marker.chgerType=="03" ||_marker.chgerType=="05" ||_marker.chgerType=="06")
+    {
+      if(_marker.stat=="1"){
               return(
               <Marker
                 key= {index}
@@ -594,7 +599,9 @@ export default class index extends Component {
                 coordinate={_marker.region}
                 description = { _marker.useTime }
                 pinColor='red'
-                onPress={()=>this.state.pinClick:!this.state.pinClick}
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
                 />
             )
             }else if(_marker.stat=='2')
@@ -606,7 +613,9 @@ export default class index extends Component {
                 coordinate={_marker.region}
                 description = { _marker.useTime }
                 pinColor='gold'
-                onPress={()=>this.state.pinClick:!this.state.pinClick}
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
                 />
             )
             }else if(_marker.stat=='3')
@@ -619,7 +628,9 @@ export default class index extends Component {
                 coordinate={_marker.region}
                 description = { _marker.useTime }
                 pinColor='blue'
-                onPress={()=>this.state.pinClick:!this.state.pinClick}
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
                 />
             )
             }else if(_marker.stat=='4')
@@ -631,7 +642,9 @@ export default class index extends Component {
                 coordinate={_marker.region}
                 description = { _marker.useTime }
                 pinColor='tomato'
-                onPress={()=>this.state.pinClick:!this.state.pinClick}
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
                 />
             )
             }else{
@@ -640,15 +653,261 @@ export default class index extends Component {
                 key= {index}
                 title = {_marker.statNm }
                 coordinate={_marker.region}
-              description = { _marker.useTime }
+                description = { _marker.useTime }
                 pinColor='green'
-                onPress={()=>this.state.pinClick:!this.state.pinClick}
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
                 />
             )
             }
+    }
+    else{
+      return;
+    }
+  }
+  if(this.state.dhksthr==true)
+  {
+    if(_marker.chgerType=="02")
+    {
+      if(_marker.stat=="1"){
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='red'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='2')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='gold'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='3')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm
+                 }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='blue'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='4')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='tomato'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else{
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='green'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }
+    }else{
+      return;
+    }
+  }
+  if(this.state.ac3tkd==true)
+  {
+    if(_marker.chgerType=="03"||_marker.chgerType=="06"||_marker.chgerType=="07")
+    {
+      if(_marker.stat=="1"){
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='red'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='2')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='gold'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='3')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm
+                 }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='blue'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='4')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='tomato'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else{
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='green'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }
+    }else{
+      return;
+    }
+  }
+  if(this.state.zhaqh==true)
+  {
+    if(_marker.chgerType=="04"||_marker.chgerType=="05"||_marker.chgerType=="06"){
+      if(_marker.stat=="1"){
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='red'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='2')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='gold'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='3')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm
+                 }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='blue'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else if(_marker.stat=='4')
+            {
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='tomato'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }else{
+              return(
+              <Marker
+                key= {index}
+                title = {_marker.statNm }
+                coordinate={_marker.region}
+                description = { _marker.useTime }
+                pinColor='green'
+                onPress={()=>this.setState({pinClick:!this.state.pinClick,informLocation:_marker})}
+                onSelect={()=>this.setState({informLocation:_marker})}
+                onDeselect={()=>this.setState({pinClick:false})}
+                />
+            )
+            }
+    }
+    else{
+      return;
+    }
+  }
+  
+  
+
+          
+            
            })}
           </MapView>
-  
+         
           {this.state.show ?
           <View style={{position:'absolute',backgroundColor: Color.white,height:80,width:Dimensions.get('window').width}}> 
             <TextInput
@@ -663,25 +922,26 @@ export default class index extends Component {
            />
           </View>
           :null}
+           
         </View>
           <View style={{position:'absolute', flexDirection:"row",flex:1,alignItems:'center',bottom:0}}>
         {
           this.state.pinClick ?
           <View style={Container.container}>
-            <Button title="어디어디장소" onPress={()=>this.props.navigation.navigate('SignUp')} />
+            <Button title={this.state.informLocation.statNm} onPress={()=>this.props.navigation.navigate('Payment')} />
             <View style={styles.subcontainer}>
               <View style={{flex:1.3}}>
-                <Button title="주차장상태창" onPress={()=>this.props.navigation.navigate('SignUp')} />
+                <Button title={this.state.informLocation.chgerType} onPress={()=>this.props.navigation.navigate('Payment')} />
               </View>
               <View style={{flex:1}}>
-                <Button title="색깔핀" onPress={()=>this.props.navigation.navigate('SignUp')} />
+                <Button title="색깔핀" onPress={()=>this.props.navigation.navigate('Payment')} />
               </View>
             </View>
           </View>
           :
           <View style ={styles.subcontainer}>
             <View style={{marginLeft:20,flex:1,bottom:30}}>
-              <Button title="QR충전" />
+              <Button title=" " />
             </View>
             <View style={{flex:1,bottom:30}}>
               <Button title="결제충전소" />
@@ -701,3 +961,4 @@ export default class index extends Component {
     );
   }
 }
+

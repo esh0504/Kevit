@@ -21,7 +21,7 @@ export default class App extends Component {
     this.setState({ fontLoaded: true });
   }
   
-  <Weather temp={Math.round(temp)} condition={condition} />
+  
   render() {
     if (this.state.fontLoaded) {
       return <Navigation />;
