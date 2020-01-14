@@ -28,7 +28,7 @@ import axios from "axios";
 
 export default class index extends Home {
      constructor() {
-    super();
+        super();
      }
      render()
      {

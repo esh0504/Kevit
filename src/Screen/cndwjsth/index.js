@@ -24,6 +24,8 @@ import Icons from "react-native-vector-icons/MaterialCommunityIcons";
 import MyWallet from "../../Screen/MyWallet/index";
 import InviteFriendsList from "../../Screen/InviteFriendsList/index";
 
+
+
 export default class index extends Component {
   
   render() {
