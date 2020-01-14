@@ -29,14 +29,14 @@ import Payment from "../../Screen/Payment/index";
 import * as Location from "expo-location";
 import Geolocation from 'react-native-geolocation-service';
 import * as SQLite from 'expo-sqlite';
-
+const db = SQLite.openDatabase("db.db");
 export default class index extends Component {
 
   constructor() {
     super();
-    this.getLocation();
-    const db=SQLite.openDataBase('db.db');
-    this.getData();
+    this.dbmake();
+    this.selectData();
+    
     this.state = {region: {
                 latitude: 37.550383,
                 longitude: 126.939822,
@@ -44,43 +44,42 @@ export default class index extends Component {
                 longitudeDelta: 0.03,
             },
       zhaqh:true,ckepah:true,ac3tkd:true,tnvjckwj:true,dhksthr:true,show:false,sourcesearchText:'출발지',destsearchText:'도착지',pinClick:false,
-      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'전체',sidemenuOpen:false,text:'Input your text',informLocation:{statNm:" ",chgerType:" "},chargertype:" ",locations:[],  };}
-      getData=async()=>{
-       const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&pageNo=&pageSize=1000&_type=json`);
-      setTimeout(() => {        
-      }, 1000);
-      this.setState({
-        locations:items[0].item
-      });
-      /*db.transaction(tx => {
-      tx.executeSql(
-        "create table if not exists items (key text primary key not null, lat int,lng int, useTime text,powerType text,statNm text);"
-      );
-      }*/);
+      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'전체',sidemenuOpen:false,text:'Input your text',informLocation:{statNm:" ",chgerType:" "},chargertype:" ",  };}
   };
   
-  update() {
+  getData=async()=>{
+       const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&pageNo=&pageSize=10000&_type=json`);
+      setTimeout(() => {        
+      }, 1000);
+      this.add(items[0].item);
+      this.getLocation();
+  }
+
+  dbmake(){
     db.transaction(tx => {
       tx.executeSql(
-        `select * from items where done = ?;`,
-        [this.props.done ? 1 : 0],
-        (_, { rows: { _array } }) => this.setState({ items: _array })
-      );
-    });
-  }
+        "create table if not exists items (key text primary key not null, lat int,lng int, useTime text,powerType text,statNm text);");
+      });
+    }
+  
+  
+selectData(){
+		db.transaction(tx => {
+       tx.executeSql("select * from items", [],this.getLocation(),this.getData());
+  })
+}
   add(text) {
     if (text === null || text === "") {
       return false;
     }
     db.transaction(
       tx => {
-        tx.executeSql("insert into items (kte, value) values (0, ?)", [text]);
+        tx.executeSql("insert into items (key,lat,lng,useTime,powerType,statNm) values (?,?,?,?,?,? )", [text.statId+text.chgerType,text.lat,text.lng,text.useTime,text.powerType,text.statNm]);
         tx.executeSql("select * from items", [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
+          console.log(rows.length)
         );
       },
       null,
-      this.update
     );
   }
   getLocation=async()=>{
@@ -91,9 +90,10 @@ export default class index extends Component {
     }catch(error){
       Alert.alert("Can't find you.","So sad");
     }
+
   }
 
-  renderMarker(_marker,tmplat,tmplng){
+  renderMarker(_marker,index,tmplat,tmplng){
     return(  <Marker
                 key= {index}
                 title = {_marker.statNm }
@@ -129,6 +129,10 @@ export default class index extends Component {
       return true;
     }
     else{
+      if(this.state.rlrhks=="기타")
+      {
+        return true;
+      }
       return false;
     }
   }
@@ -222,7 +226,7 @@ export default class index extends Component {
               <Picker selectedValue={this.state.rlrhks} onValueChange={(itemValue,itemIndex)=>this.setState({rlrhks:itemValue})}>
                 <Picker.Item label="전체" value="전체"/>
                 <Picker.Item label="환경부" value="환경부"/>
-                <Picker.Item label="환경부아님" value="환경부아님"/>
+                <Picker.Item label="기타" value="기타"/>
               </Picker>
             </View>
 
@@ -252,30 +256,23 @@ export default class index extends Component {
             initialRegion={this.state.region}
             onPress={()=>this.setState({pinClick:true})}
           >
-          
           {
-            
-
-            this.state.locations.map((_marker, index) => {
+            db.map((_marker, index) => {
             if(!this.checkRlrhks(_marker.busiNm))
             {
               return;
             };
-            if(!this.checkLocal(_marker,this.state.region.latitude,this.state.region.latitudeDelta,this.state.region.longitude,this.state.region.longitudeDelta))
+            /*if(!this.checkLocal(_marker,this.state.region.latitude,this.state.region.latitudeDelta,this.state.region.longitude,this.state.region.longitudeDelta))
             {
               return;
-            }
-            
+            }*/
             var tmplat = Number(_marker.lat);
             var tmplng = Number(_marker.lng);
-            
-
-          
   if(this.state.ckepah==true)
   {
     if(_marker.chgerType=="01" ||_marker.chgerType=="03" ||_marker.chgerType=="05" ||_marker.chgerType=="06")
     {
-      return(this.renderMarker(_marker,tmplat,tmplng));
+      return(this.renderMarker(_marker,index,tmplat,tmplng));
     }
   }
   
@@ -283,7 +280,7 @@ export default class index extends Component {
   {
     if(_marker.chgerType=="02")
     {                                         
-      return(this.renderMarker(_marker,tmplat,tmplng));
+       return(this.renderMarker(_marker,index,tmplat,tmplng));
     }
   }
   
@@ -291,14 +288,14 @@ export default class index extends Component {
   {
     if(_marker.chgerType=="03"||_marker.chgerType=="06"||_marker.chgerType=="07")
     {
-       return(this.renderMarker(_marker,tmplat,tmplng));
+        return(this.renderMarker(_marker,index,tmplat,tmplng));
     }
   }
   if(this.state.zhaqh==true)
   {
     if(_marker.chgerType=="04"||_marker.chgerType=="05"||_marker.chgerType=="06")
     {
-      return(this.renderMarker(_marker,tmplat,tmplng));
+      return(this.renderMarker(_marker,index,tmplat,tmplng));
     }
   }
   })}
