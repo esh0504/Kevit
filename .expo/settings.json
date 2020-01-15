@@ -1,8 +1,8 @@
 {
+  "urlRandomness": "tp-vu5",
   "hostType": "lan",
   "lanType": "ip",
   "dev": true,
   "minify": false,
-  "urlRandomness": "qt-tw5",
   "https": false
 }

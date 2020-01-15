@@ -1,9 +1,9 @@
 {
+  "expoServerNgrokUrl": "https://tp-vu5.anonymous.ubernextgen.exp.direct",
+  "packagerNgrokUrl": "https://packager.tp-vu5.anonymous.ubernextgen.exp.direct",
+  "ngrokPid": 14540,
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 16764,
-  "expoServerNgrokUrl": "https://qt-tw5.anonymous.ubernextgen.exp.direct",
-  "packagerNgrokUrl": "https://packager.qt-tw5.anonymous.ubernextgen.exp.direct",
-  "ngrokPid": 6136
+  "packagerPid": 17592
 }

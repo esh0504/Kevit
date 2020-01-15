@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Navigation from './src/Navigation/index'
 import { AppLoading } from "expo";//
 import * as Font from 'expo-font';
+import axios from "axios";
 export default class App extends Component {
   constructor() {
     super();
@@ -19,10 +20,13 @@ export default class App extends Component {
     });
     this.setState({ fontLoaded: true });
   }
+  
+  
   render() {
     if (this.state.fontLoaded) {
       return <Navigation />;
     } else {
+      
       return <AppLoading />;
     }
   }

@@ -1,45 +1,43 @@
-import React from "react";
-import Loading from "./Loading";
-import * as Location from "expo-location";
-import { Alert, TextComponent } from "react-native";
-import axios from "axios";
-import Weather from "./Weather";
-
-const API_KEY="d80df6a1dffec7eb6928cbd06336b934";
-export default class extends React.Component{
-  state={
-    isLoading: true
-  };
-  
-  getWeather=async(latitude,longitude)=>{
-    const
-    { data:{main:{temp},weather }}
-    =await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
-    );
-    this.setState({
-      isLoading:false,
-      condition:weather[0].main,
-      temp
-    });
-  };
-  getLocation=async()=>{
-    try{
-      await Location.requestPermissionsAsync();
-      const{coords:{latitude,longitude}}=await Location.getCurrentPositionAsync();
-      this.getWeather(37.5509,126.941);
-      console.log(37.5509,126.941);
-    }catch(error){
-      Alert.alert("Can't find you.","So sad");
+ {
+            db.map((_marker, index) => {
+            if(!this.checkRlrhks(_marker.busiNm))
+            {
+              return;
+            };
+            /*if(!this.checkLocal(_marker,this.state.region.latitude,this.state.region.latitudeDelta,this.state.region.longitude,this.state.region.longitudeDelta))
+            {
+              return;
+            }*/
+            var tmplat = Number(_marker.lat);
+            var tmplng = Number(_marker.lng);
+  if(this.state.ckepah==true)
+  {
+    if(_marker.chgerType=="01" ||_marker.chgerType=="03" ||_marker.chgerType=="05" ||_marker.chgerType=="06")
+    {
+      return(this.renderMarker(_marker,index,tmplat,tmplng));
     }
   }
-  componentDidMount()
+  
+  if(this.state.dhksthr==true)
   {
-    this.getLocation();
+    if(_marker.chgerType=="02")
+    {                                         
+       return(this.renderMarker(_marker,index,tmplat,tmplng));
+    }
   }
-  render()
+  
+  if(this.state.ac3tkd==true)
   {
-    const{isLoading,condition,temp}=this.state;
-    return isLoading ? <Loading/> : <Weather temp={Math.round(temp)} condition={condition} />
+    if(_marker.chgerType=="03"||_marker.chgerType=="06"||_marker.chgerType=="07")
+    {
+        return(this.renderMarker(_marker,index,tmplat,tmplng));
+    }
   }
-};
+  if(this.state.zhaqh==true)
+  {
+    if(_marker.chgerType=="04"||_marker.chgerType=="05"||_marker.chgerType=="06")
+    {
+      return(this.renderMarker(_marker,index,tmplat,tmplng));
+    }
+  }
+  })}

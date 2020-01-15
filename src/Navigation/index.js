@@ -27,8 +27,15 @@ import Tips from "../Screen/Tips/index";
 import InviteFriendsList from "../Screen/InviteFriendsList/index";
 import MyAccount from '../Screen/MyAccount/index';
 import cndwjsth from '../Screen/cndwjsth/index';
+import LocInform from '../Screen/LocInform/index';
 const AppNavigator = createStackNavigator(
   {
+    LocInform:{
+      screen:LocInform,
+      navigationOptions:{
+        header:null
+      }
+    },
     Slider: {
       screen: Slider,
       navigationOptions: {
