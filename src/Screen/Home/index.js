@@ -78,19 +78,15 @@ export default class index extends Component {
 
 
   add(location) {
-    
     if (location === null || location === "") {
       return;
     }
-    
     db.transaction(
       tx => {
         tx.executeSql("insert into items (id,lat,lng,useTime,powerType,busiNm,statNm,stat) values (?,?,?,?,?,?,?,?)", [location.statId+location.chgerType,location.lat,location.lng,location.useTime,location.powerType,location.busiNm,location.statNm,location.stat]);
       },
       null,
-      
     );
-    
   }
  
   getData=async()=>{
@@ -289,12 +285,8 @@ export default class index extends Component {
             onPress={()=>this.setState({pinClick:true})}
           >
           {
-          db.transaction(
-            tx => {
-              tx.executeSql("select * from items where stat=?", [taaaaa], (_, { rows: { _array } }) => this.setState({ selectLocations: _array }))
-            },
-            null,  
-          )
+            if(this.state.dhksthr==true)
+                this.getdhksthr();
           }
           {
             this.state.selectLocations.map((_marker,index)=>{
@@ -303,9 +295,9 @@ export default class index extends Component {
               return(this.renderMarker(_marker,tmplat,tmplng));
             })
           }
-          
-          
-         
+          {
+            if(this.state.)
+          }
           </MapView>
          
           {this.state.show ?
