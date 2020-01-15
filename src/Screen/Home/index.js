@@ -29,13 +29,14 @@ import Payment from "../../Screen/Payment/index";
 import * as Location from "expo-location";
 import Geolocation from 'react-native-geolocation-service';
 import * as SQLite from 'expo-sqlite';
-const db = SQLite.openDatabase("db.db");
+
+const db = SQLite.openDatabase("dab8.db");
+const taaaaa="1"
+
 export default class index extends Component {
 
   constructor() {
     super();
-    this.dbmake();
-    this.selectData();
     
     this.state = {region: {
                 latitude: 37.550383,
@@ -44,43 +45,74 @@ export default class index extends Component {
                 longitudeDelta: 0.03,
             },
       zhaqh:true,ckepah:true,ac3tkd:true,tnvjckwj:true,dhksthr:true,show:false,sourcesearchText:'출발지',destsearchText:'도착지',pinClick:false,
-      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'전체',sidemenuOpen:false,text:'Input your text',informLocation:{statNm:" ",chgerType:" "},chargertype:" ",  };}
-  };
+      ehfh:'',cndwjsth:'',wldur:'',rlrhks:'전체',sidemenuOpen:false,text:'Input your text',informLocation:{statNm:" ",chgerType:" "},chargertype:" ",locations:[],selectLocations:[], selectRlrhksLocation:[], };}
   
-  getData=async()=>{
-       const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&pageNo=&pageSize=10000&_type=json`);
-      setTimeout(() => {        
-      }, 1000);
-      this.add(items[0].item);
-      this.getLocation();
-  }
-
-  dbmake(){
+  componentDidMount() {
     db.transaction(tx => {
       tx.executeSql(
-        "create table if not exists items (key text primary key not null, lat int,lng int, useTime text,powerType text,statNm text);");
-      });
-    }
-  
-  
-selectData(){
-		db.transaction(tx => {
-       tx.executeSql("select * from items", [],this.getLocation(),this.getData());
-  })
-}
-  add(text) {
-    if (text === null || text === "") {
-      return false;
-    }
-    db.transaction(
+        "create table if not exists items (id text primary key not null, lat text,lng text,useTime text,powerType text,busiNm text,statNm text,stat text);"
+      );
+    });
+    this.showDb();
+  }
+
+  selectRlrhks(rlrhks){
+    if(rlrhks=="전체")
+    {
+      db.transaction(
       tx => {
-        tx.executeSql("insert into items (key,lat,lng,useTime,powerType,statNm) values (?,?,?,?,?,? )", [text.statId+text.chgerType,text.lat,text.lng,text.useTime,text.powerType,text.statNm]);
-        tx.executeSql("select * from items", [], (_, { rows }) =>
-          console.log(rows.length)
-        );
+        tx.executeSql("select * from items", []);
       },
       null,
     );
+    }else{
+      db.transaction(
+      tx => {
+        tx.executeSql("select * from items where busiNm=?", [rlrhks]);
+      },
+      null,
+    );
+    }
+  }
+
+
+
+  add(location) {
+    
+    if (location === null || location === "") {
+      return;
+    }
+    
+    db.transaction(
+      tx => {
+        tx.executeSql("insert into items (id,lat,lng,useTime,powerType,busiNm,statNm,stat) values (?,?,?,?,?,?,?,?)", [location.statId+location.chgerType,location.lat,location.lng,location.useTime,location.powerType,location.busiNm,location.statNm,location.stat]);
+      },
+      null,
+      
+    );
+    
+  }
+ 
+  getData=async()=>{
+       const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&pageNo=&pageSize=100&_type=json`);
+      setTimeout(() => {        
+      }, 1000);
+      this.setState({
+        locations:items[0].item
+      });
+      this.state.locations.map((_marker,index)=>{
+        this.add(_marker);
+        console.log(index);
+      })
+      this.showDb();
+  }
+
+  showDb(){
+    db.transaction(
+      tx=>{
+        tx.executeSql("select * from items", [], (_, { rows }) =>console.log(rows.length));
+      }
+    )
   }
   getLocation=async()=>{
     try{
@@ -93,9 +125,9 @@ selectData(){
 
   }
 
-  renderMarker(_marker,index,tmplat,tmplng){
+  renderMarker(_marker,tmplat,tmplng){
     return(  <Marker
-                key= {index}
+                key= {_marker.id}
                 title = {_marker.statNm }
                 coordinate={{latitude:tmplat,longitude:tmplng}}
                 description = { _marker.useTime }
@@ -257,48 +289,23 @@ selectData(){
             onPress={()=>this.setState({pinClick:true})}
           >
           {
-            db.map((_marker, index) => {
-            if(!this.checkRlrhks(_marker.busiNm))
-            {
-              return;
-            };
-            /*if(!this.checkLocal(_marker,this.state.region.latitude,this.state.region.latitudeDelta,this.state.region.longitude,this.state.region.longitudeDelta))
-            {
-              return;
-            }*/
-            var tmplat = Number(_marker.lat);
-            var tmplng = Number(_marker.lng);
-  if(this.state.ckepah==true)
-  {
-    if(_marker.chgerType=="01" ||_marker.chgerType=="03" ||_marker.chgerType=="05" ||_marker.chgerType=="06")
-    {
-      return(this.renderMarker(_marker,index,tmplat,tmplng));
-    }
-  }
-  
-  if(this.state.dhksthr==true)
-  {
-    if(_marker.chgerType=="02")
-    {                                         
-       return(this.renderMarker(_marker,index,tmplat,tmplng));
-    }
-  }
-  
-  if(this.state.ac3tkd==true)
-  {
-    if(_marker.chgerType=="03"||_marker.chgerType=="06"||_marker.chgerType=="07")
-    {
-        return(this.renderMarker(_marker,index,tmplat,tmplng));
-    }
-  }
-  if(this.state.zhaqh==true)
-  {
-    if(_marker.chgerType=="04"||_marker.chgerType=="05"||_marker.chgerType=="06")
-    {
-      return(this.renderMarker(_marker,index,tmplat,tmplng));
-    }
-  }
-  })}
+          db.transaction(
+            tx => {
+              tx.executeSql("select * from items where stat=?", [taaaaa], (_, { rows: { _array } }) => this.setState({ selectLocations: _array }))
+            },
+            null,  
+          )
+          }
+          {
+            this.state.selectLocations.map((_marker,index)=>{
+              var tmplat=Number(_marker.lat);
+              var tmplng=Number(_marker.lng);
+              return(this.renderMarker(_marker,tmplat,tmplng));
+            })
+          }
+          
+          
+         
           </MapView>
          
           {this.state.show ?
