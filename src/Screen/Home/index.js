@@ -30,9 +30,10 @@ import * as Location from "expo-location";
 import Geolocation from 'react-native-geolocation-service';
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase("dab8.db");
+const db = SQLite.openDatabase("dab10.db");
 const taaaaa="1"
-
+var cndwjsthId=""
+var cndwjsrlNumber=1;
 export default class index extends Component {
 
   constructor() {
@@ -50,10 +51,9 @@ export default class index extends Component {
   componentDidMount() {
     db.transaction(tx => {
       tx.executeSql(
-        "create table if not exists items (id text primary key not null, lat text,lng text,useTime text,powerType text,busiNm text,statNm text,stat text);"
+        "create table if not exists cndwjsrlDB (id text primary key not null, lat text,lng text,useTime text,busiNm text,statNm text,cndwjsrlNumber int,cndwjsthzhaqh text,cndwjsthckepah text,cndwjsthac3tkd text,cndwjsthdhksthr text);"
       );
     });
-    this.showDb();
   }
 
   selectRlrhks(rlrhks){
@@ -76,31 +76,55 @@ export default class index extends Component {
   }
 
 
-
   add(location) {
     if (location === null || location === "") {
       return;
     }
+    if(location.statId==cndwjsthId)
+    {
+      cndwjsrlNumber+=1;
+      return;
+    }
     db.transaction(
       tx => {
-        tx.executeSql("insert into items (id,lat,lng,useTime,powerType,busiNm,statNm,stat) values (?,?,?,?,?,?,?,?)", [location.statId+location.chgerType,location.lat,location.lng,location.useTime,location.powerType,location.busiNm,location.statNm,location.stat]);
-      },
-      null,
+      tx.executeSql("insert into cndwjsthDB (id,lat,lng,useTime,busiNm,statNm,cndwjsrlNumber,cndwjsthzhaqh,cndwjsthckepah,cndwjsthac3tkd,cndwjsthdhksthr) values (?,?,?,?,?,?,?,?,?,?,?)", [location.statId,location.lat,location.lng,location.useTime,location.busiNm,location.statNm,cndwjsrlNumber,]);
+    },
+    null,
     );
+    cndwjsrlNumber=1;
+}
+  mark(){
+    if(this.state.ckepah==true){
+      if(this.state.zhaqh==true){
+        if(this.state.ac3tkd==true){
+          db.transaction(
+          tx=>{
+            tx.executeSql("select * from items01", [], (_, { rows:{_array} }) =>this.setState({locations:_array}));
+            }
+          )
+        }
+      }
+    }
   }
- 
   getData=async()=>{
-       const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&pageNo=&pageSize=100&_type=json`);
-      setTimeout(() => {        
-      }, 1000);
-      this.setState({
-        locations:items[0].item
-      });
-      this.state.locations.map((_marker,index)=>{
-        this.add(_marker);
-        console.log(index);
-      })
-      this.showDb();
+     var pgn=1;
+    try{
+      while(true){
+        const {data:{items}}=await axios.get(`http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?ServiceKey=0h3zF0FTGvhqH7jmJ1JGbETb95rTwuRFF6kthn1Cj7gUOdKWghixpFIS23yJ1cWtlAZOJ6wAmj1Fx9QljzCylw%3D%3D&pageNo=${pgn}&pageSize=10000&_type=json`);
+        setTimeout(() => {        
+        }, 1000);
+        this.setState({
+          locations:items[0].item
+        });
+        this.state.locations.map((_marker,index)=>{
+          this.add(_marker);
+          console.log(index);
+        })
+        pgn=pgn+1;
+      }
+    }catch(e){
+      return;
+    }
   }
 
   showDb(){
@@ -284,20 +308,11 @@ export default class index extends Component {
             initialRegion={this.state.region}
             onPress={()=>this.setState({pinClick:true})}
           >
-          {
-            if(this.state.dhksthr==true)
-                this.getdhksthr();
+         {
+          if(this.state.ckepah==true&&this.state.zhaqh==true&&this.state.ac3tkd==true){
+            
           }
-          {
-            this.state.selectLocations.map((_marker,index)=>{
-              var tmplat=Number(_marker.lat);
-              var tmplng=Number(_marker.lng);
-              return(this.renderMarker(_marker,tmplat,tmplng));
-            })
-          }
-          {
-            if(this.state.)
-          }
+         }
           </MapView>
          
           {this.state.show ?
